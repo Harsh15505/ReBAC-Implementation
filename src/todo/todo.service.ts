@@ -20,7 +20,7 @@ export class TodoService {
   constructor(
     @InjectModel(Todo.name) private todoModel: Model<TodoDocument>,
     @InjectModel(Relation.name) private relationModel: Model<RelationDocument>,
-  ) {}
+  ) { }
 
   async findAll(userId: string): Promise<TodoDocument[]> {
     try {
@@ -136,7 +136,7 @@ export class TodoService {
     }
   }
 
-  async share(id: string, shareDto: ShareTodoDto, userId: string): Promise<void> {
+  async share(id: string, shareDto: ShareTodoDto, userId: string): Promise<RelationDocument> {
     try {
       const ownerRelation = await this.relationModel.findOne({
         subjectId: new Types.ObjectId(userId),
@@ -163,7 +163,7 @@ export class TodoService {
         resourceType: ENTITY_TODO,
       });
 
-      await this.relationModel.create({
+      return await this.relationModel.create({
         subjectId: targetUserId,
         resourceId: resourceId,
         resourceType: ENTITY_TODO,
