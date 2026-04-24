@@ -27,7 +27,7 @@ export class TodoController {
   constructor(
     private readonly todoService: TodoService,
     private readonly caslAbilityFactory: CaslAbilityFactory,
-  ) {}
+  ) { }
 
   @Get()
   @CheckPolicies((ability) => ability.can(Action.Read, 'Todo'))
@@ -37,8 +37,7 @@ export class TodoController {
 
   @Get(':id')
   async findOne(@Param('id') id: string, @CurrentUser() user: JwtUser) {
-    const ability = this.caslAbilityFactory.defineAbilityFor(user);
-    return await this.todoService.findOne(id, ability);
+    return await this.todoService.findOne(id, user.userId);
   }
 
   @Post()
@@ -54,15 +53,13 @@ export class TodoController {
     @Body() updateTodoDto: UpdateTodoDto,
     @CurrentUser() user: JwtUser,
   ) {
-    const ability = this.caslAbilityFactory.defineAbilityFor(user);
-    return await this.todoService.update(id, updateTodoDto, ability);
+    return await this.todoService.update(id, updateTodoDto, user.userId);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string, @CurrentUser() user: JwtUser) {
-    const ability = this.caslAbilityFactory.defineAbilityFor(user);
-    return await this.todoService.remove(id, ability);
+    return await this.todoService.remove(id, user.userId);
   }
 
   @Post(':id/share')
@@ -72,7 +69,6 @@ export class TodoController {
     @Body() shareDto: ShareTodoDto,
     @CurrentUser() user: JwtUser,
   ) {
-    const ability = this.caslAbilityFactory.defineAbilityFor(user);
-    return await this.todoService.share(id, shareDto, ability);
+    return await this.todoService.share(id, shareDto, user.userId);
   }
 }

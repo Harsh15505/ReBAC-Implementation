@@ -16,15 +16,6 @@ export class Todo{
 
     @Prop({ default: false })
     completed: boolean;
-
-    @Prop({ type: Types.ObjectId, ref: 'User', required: true, index: true })
-    ownerId: Types.ObjectId;
-
-    @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
-    editors: Types.ObjectId[];
-
-    @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
-    viewers: Types.ObjectId[];
 }
 
 export const TodoSchema = SchemaFactory.createForClass(Todo);
